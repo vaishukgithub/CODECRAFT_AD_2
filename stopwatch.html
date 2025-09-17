@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch App</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stopwatch">
+    <div id="display">00:00:000</div>
+    <div class="buttons">
+      <button class="start" onclick="startTimer()">Start</button>
+      <button class="pause" onclick="pauseTimer()">Pause</button>
+      <button class="reset" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let startTime = 0;
+    let updatedTime = 0;
+    let difference = 0;
+    let timerInterval;
+    let running = false;
+
+    const display = document.getElementById("display");
+
+    function startTimer() {
+      if (!running) {
+        startTime = new Date().getTime() - difference;
+        timerInterval = setInterval(updateTimer, 10);
+        running = true;
+      }
+    }
+
+    function pauseTimer() {
+      if (running) {
+        clearInterval(timerInterval);
+        difference = new Date().getTime() - startTime;
+        running = false;
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      running = false;
+      startTime = 0;
+      difference = 0;
+      display.innerHTML = "00:00:000";
+    }
+
+    function updateTimer() {
+      updatedTime = new Date().getTime() - startTime;
+
+      let minutes = Math.floor((updatedTime / (1000 * 60)) % 60);
+      let seconds = Math.floor((updatedTime / 1000) % 60);
+      let milliseconds = updatedTime % 1000;
+
+      minutes = (minutes < 10) ? "0" + minutes : minutes;
+      seconds = (seconds < 10) ? "0" + seconds : seconds;
+      milliseconds = milliseconds.toString().padStart(3, "0");
+
+      display.innerHTML = `${minutes}:${seconds}:${milliseconds}`;
+    }
+  </script>
+</body>
+</html>
